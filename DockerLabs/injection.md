@@ -1,8 +1,8 @@
-#Maquina injention
+# Maquina injention
 
--Nivel: Muy fácil
+- Nivel: Muy fácil
 
-##Escaneo de puertos
+## Escaneo de puertos
 
 <p>Tras encender la máquina lo primero que haremos será un ping para comprobar que todo esta correcto</p>
 
