@@ -7,6 +7,7 @@
 <p>Tras encender la máquina lo primero que haremos será un ping para comprobar que todo esta correcto</p>
 
 '''
+
 ping -c1 172.17.0.2
 
 '''
