@@ -1,6 +1,6 @@
 # Máquina Nodeclimb
 
-- Nivel fácil
+- Nivel: fácil
 
 ## Escaneo de puertos
 
